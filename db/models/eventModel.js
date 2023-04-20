@@ -4,30 +4,34 @@ const handleMongooseError = require("../../helpers/handleMongoosError");
 
 // eslint-disable-next-line no-useless-escape
 const dateRegExp = /^(0[1-9]|1\d|2\d|3[01])\-(0[1-9]|1[0-2])\-(19|20)\d{2}$/;
-const eventSchema = new Schema({
-  title: {
-    type: String,
-    required: true,
+const eventSchema = new Schema(
+  {
+    title: {
+      type: String,
+      required: true,
+    },
+    description: {
+      type: String,
+      required: true,
+    },
+    startDate: {
+      type: Date,
+      match: dateRegExp,
+      required: true,
+    },
+    endDate: {
+      type: Date,
+      match: dateRegExp,
+      required: true,
+    },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "author",
+      required: true,
+    },
   },
-  description: {
-    type: String,
-    required: true,
-  },
-  startDate: {
-    type: Date,
-    match: dateRegExp,
-    required: true,
-  },
-  endDate: {
-    type: Date,
-    match: dateRegExp,
-    required: true,
-  },
-  owner: {
-    type: String,
-    required: true,
-  },
-});
+  { versionKey: false, timestamps: true }
+);
 eventSchema.post("save", handleMongooseError);
 const Event = model("event", eventSchema);
 
