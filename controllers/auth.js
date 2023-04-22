@@ -59,7 +59,6 @@ const login = async (req, res) => {
     ourUser.token = token;
     await ourUser.save();
   }
-
   //
   res.status(200).json({
     status: 'success',
@@ -79,6 +78,7 @@ const getCurrent = async (req, res) => {
 };
 const logout = async (req, res) => {
   const { _id } = req.user;
+  // removing token
   await User.findByIdAndUpdate(_id, { token: null });
   res.status(200).json({
     status: 'success',

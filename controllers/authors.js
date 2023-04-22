@@ -5,7 +5,7 @@ const getAllAuthors = async (req, res) => {
   const { _id: owner } = req.user;
   // pagination
   const { page = 1, limit: userLimit = 10 } = req.query;
-const [skip,limit] = pagination(page,userLimit)
+  const [skip, limit] = pagination(page, userLimit);
   // request for get authors
   const authors = await Author.find(
     { owner },
