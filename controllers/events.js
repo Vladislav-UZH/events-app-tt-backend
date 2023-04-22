@@ -1,21 +1,18 @@
 const { Author } = require('../db/models/authorModel');
 const { Event } = require('../db/models/eventModel');
-const { HttpError } = require('../helpers');
+const { HttpError, pagination } = require('../helpers');
 
 // controllers of getting events
 const getAllEvents = async (req, res) => {
-  const { id: authorId } = req.params;
+  const { id: owner } = req.params;
   // pagination
-  const { page = 1, limit = 10 } = req.query;
-  const skip = (page - 1) * limit;
-  // Access checking
-
+  const { page = 1, limit: userLimit = 10 } = req.query;
+  const [skip, limit] = pagination(page, userLimit);
   // request for events
-  const events = await Event.find({ authorId }, '-createdAt -updatedAt', {
+  const events = await Event.find({ owner }, '-createdAt -updatedAt', {
     skip,
     limit,
   });
-
   if (!events) {
     throw HttpError(404);
   }
@@ -65,6 +62,7 @@ const createEvent = async (req, res) => {
 };
 const deleteEvent = async (req, res) => {
   const { id } = req.params;
+  // finding the event and remove
   const event = await Event.findByIdAndRemove(id);
   if (!event) {
     throw HttpError(404);

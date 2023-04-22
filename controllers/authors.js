@@ -1,12 +1,11 @@
 const { Author } = require('../db/models/authorModel');
-const { HttpError } = require('../helpers');
+const { HttpError, pagination } = require('../helpers');
 // controllers of getting  authors
 const getAllAuthors = async (req, res) => {
   const { _id: owner } = req.user;
   // pagination
-  const { page = 1, limit = 10 } = req.query;
-  const skip = (page - 1) * limit;
-
+  const { page = 1, limit: userLimit = 10 } = req.query;
+const [skip,limit] = pagination(page,userLimit)
   // request for get authors
   const authors = await Author.find(
     { owner },
