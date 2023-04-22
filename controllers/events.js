@@ -1,5 +1,7 @@
+const { Author } = require('../db/models/authorModel');
 const { Event } = require('../db/models/eventModel');
-const HttpError = require('../helpers/httpError');
+const { HttpError } = require('../helpers');
+
 // controllers of getting events
 const getAllEvents = async (req, res) => {
   const { id: authorId } = req.params;
@@ -25,7 +27,7 @@ const getAllEvents = async (req, res) => {
 };
 const getEventById = async (req, res) => {
   const { id } = req.params;
-  const event = await Event.findById(id);
+  const event = await Event.findById(id).select('-createdAt -updatedAt');
   if (!event) {
     throw HttpError(404);
   }
@@ -41,17 +43,20 @@ const getEventById = async (req, res) => {
 const createEvent = async (req, res) => {
   const { id: owner } = req.params;
   const { startDate } = req.body;
-  const excludedFields = {
-    createdAt: 0,
-    updatedAt: 0,
-  };
+  // checking whether the event will be unique
   const hasAlreadyEvent = await Event.findOne({ owner, startDate });
-
   if (hasAlreadyEvent) {
     throw HttpError(409, `You already have the event started at ${startDate}`);
   }
-  const newEvent = await Event.create({ ...req.body, owner }, excludedFields);
+  // creating the event
+  const newEvent = await Event.create({ ...req.body, owner });
 
+  // updating author body
+  const ourAuthor = await Author.findById(owner);
+  ourAuthor.totalEvents += 1;
+  ourAuthor.nextEventStartDate = newEvent.startDate;
+  await ourAuthor.save();
+  //
   res.status(201).json({
     status: 'success',
     code: 201,
@@ -59,6 +64,11 @@ const createEvent = async (req, res) => {
   });
 };
 const deleteEvent = async (req, res) => {
+  const { id } = req.params;
+  const event = await Event.findByIdAndRemove(id);
+  if (!event) {
+    throw HttpError(404);
+  }
   res.status(200).json({
     status: 'success',
     code: 200,

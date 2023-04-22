@@ -1,5 +1,5 @@
 const { Author } = require('../db/models/authorModel');
-const HttpError = require('../helpers/httpError');
+const { HttpError } = require('../helpers');
 // controllers of getting  authors
 const getAllAuthors = async (req, res) => {
   const { _id: owner } = req.user;
@@ -27,7 +27,7 @@ const getAllAuthors = async (req, res) => {
 };
 const getAuthorById = async (req, res) => {
   const { id } = req.params;
-  const author = await Author.findById(id);
+  const author = await Author.findById(id).select('-createdAt -updatedAt');
   if (!author) {
     throw HttpError(404);
   }
@@ -42,24 +42,22 @@ const getAuthorById = async (req, res) => {
 // controllers of setting authors
 const createAuthor = async (req, res) => {
   const { _id: owner } = req.user;
-  const excludedFields = {
-    createdAt: 0,
-    updatedAt: 0,
-    owner: 0,
-  };
   const { email } = req.body;
   // checking emails for unique
+
   const author = await Author.findOne({ email });
   if (author) {
     throw HttpError(409, 'Email already exists');
   }
-  const newAuthor = await Author.create({ ...req.body, owner }, excludedFields);
+  // creating
+  const newAuthor = await Author.create({ ...req.body, owner });
   res.status(201).json({
     status: 'success',
     code: 201,
     data: newAuthor,
   });
 };
+//
 const deleteAuthor = async (req, res) => {
   const { id } = req.params;
 
@@ -68,7 +66,11 @@ const deleteAuthor = async (req, res) => {
     throw HttpError(404);
   }
 
-  res.json({ message: 'Deleted success' });
+  res.status(200).json({
+    status: 'success',
+    code: 200,
+    message: 'Deleted success',
+  });
 };
 
 module.exports = {

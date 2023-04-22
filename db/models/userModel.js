@@ -1,6 +1,6 @@
-const Joi = require("joi");
-const { Schema, model } = require("mongoose");
-const handleMongooseError = require("../../helpers/handleMongoosError");
+const Joi = require('joi');
+const { Schema, model } = require('mongoose');
+const { handleMongooseError } = require('../../helpers');
 // eslint-disable-next-line no-useless-escape
 const emailRegEx = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 const userSchema = new Schema(
@@ -23,7 +23,7 @@ const userSchema = new Schema(
   },
   { versionKey: false, timestamps: true }
 );
-userSchema.post("save", handleMongooseError);
+userSchema.post('save', handleMongooseError);
 
 // validation schemas
 const registerSchema = Joi.object({
@@ -36,6 +36,6 @@ const loginSchema = Joi.object({
 });
 const schemas = { registerSchema, loginSchema };
 // model
-const User = model("user", userSchema);
+const User = model('user', userSchema);
 
 module.exports = { User, schemas };

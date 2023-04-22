@@ -1,6 +1,6 @@
 const Joi = require('joi');
 const { Schema, model } = require('mongoose');
-const handleMongooseError = require('../../helpers/handleMongoosError');
+const { handleMongooseError } = require('../../helpers');
 // eslint-disable-next-line no-useless-escape
 const emailRegEx = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
@@ -24,7 +24,14 @@ const authorSchema = new Schema(
       type: String,
       required: true,
     },
-
+    totalEvents: {
+      type: Number,
+      default: 0,
+    },
+    nextEventStartDate: {
+      type: String,
+      default: null,
+    },
     owner: {
       type: Schema.Types.ObjectId,
       ref: 'user',

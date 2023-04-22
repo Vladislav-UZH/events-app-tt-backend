@@ -8,12 +8,8 @@ const validateBody = (schema, statusCode = 400, errorMessage) => {
       next(HttpError(400, 'missing fields'));
     }
     if (error) {
-      next(
-        HttpError(
-          statusCode,
-          errorMessage || `missing required ${error.details[0].path[0]} field`
-        )
-      );
+      console.log(error);
+      next(HttpError(statusCode, errorMessage || error.message));
     }
     next();
   };

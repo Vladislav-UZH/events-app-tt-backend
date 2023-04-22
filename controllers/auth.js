@@ -1,6 +1,5 @@
 const { User } = require('../db/models/userModel');
-const HttpError = require('../helpers/httpError');
-const hashPasswordService = require('../helpers/hashPasswordService');
+const { HttpError, hashPasswordService } = require('../helpers');
 const jwt = require('jsonwebtoken');
 
 const { SECRET } = process.env;
@@ -37,7 +36,9 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
   const { email, password } = req.body;
+  let token = null;
   const ourUser = await User.findOne({ email });
+  // checking user credentials
   if (!ourUser) {
     throw HttpError(401, 'Email or password invalid');
   }
@@ -48,7 +49,18 @@ const login = async (req, res) => {
   if (!isPasswordCorrect) {
     throw HttpError(401, 'Email or password invalid');
   }
-  const token = ourUser.token;
+  // token creation
+  token = ourUser.token;
+  const payload = { id: ourUser._id };
+  const time = '23h';
+
+  if (!token) {
+    token = jwt.sign(payload, SECRET, { expiresIn: time });
+    ourUser.token = token;
+    await ourUser.save();
+  }
+
+  //
   res.status(200).json({
     status: 'success',
     code: 200,

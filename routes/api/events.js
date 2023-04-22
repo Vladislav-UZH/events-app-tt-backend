@@ -5,7 +5,7 @@ const {
   authenticate,
   isValidId,
   validateBody,
-  isHaveAccess,
+  hasAccessToIt,
 } = require('../../middlewares');
 const router = express.Router();
 
@@ -13,21 +13,20 @@ const router = express.Router();
 router.get(
   '/author/:id',
   authenticate,
-  isHaveAccess,
+  hasAccessToIt,
   isValidId,
   ctrl.getAllEvents
 );
-router.get('/:id', authenticate, isValidId, isHaveAccess, ctrl.getEventById);
+router.get('/:id', authenticate, isValidId, ctrl.getEventById);
 // setting events
 router.post(
   '/author/:id',
   authenticate,
-
   isValidId,
-  isHaveAccess,
+  hasAccessToIt,
   validateBody(schemas.createEventSchema, 400),
   ctrl.createEvent
 );
-router.delete('/:id', authenticate, isValidId, isHaveAccess, ctrl.deleteEvent);
+router.delete('/:id', authenticate, isValidId, ctrl.deleteEvent);
 
 module.exports = router;
