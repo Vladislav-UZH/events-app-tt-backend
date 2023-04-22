@@ -16,7 +16,7 @@ http://localhost:<PORT>
 ### --Auth--
 
 - Main route = "/api/auth"
-  - "/current" - (GET)
+  - "/current" - (GET) @return {status,code, message}
   - "/login" - (POST) @return {status, code, data: {token}}
   - "/registration" - (POST) @return {status, code, data: {token}}
   - "/logout" - (POST) @return {status, code, message}
