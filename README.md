@@ -4,7 +4,7 @@
 
 ---
 
-- Use "npm install" or "npm i" and wait to downloading.
+- Use "npm install" or "npm i" and wait for the downloading.
 - Create file ".env" and add the variables contained in the .env.example.
 - Use "npm start" or "npm run start:dev" to start the server and check the result message in console.
 - Use "API Description" to create a requests. 
