@@ -2,16 +2,15 @@
 
 ### Commands:
 
-- `npm start` &mdash; старт сервера в режимі production
-- `npm run start:dev` &mdash; старт сервера в режимі розробки (development)
-- `npm run lint` &mdash; запустити виконання перевірки коду з eslint, необхідно
-  виконувати перед кожним PR та виправляти всі помилки лінтера
-- `npm lint:fix` &mdash; та ж перевірка лінтера, але з автоматичними
-  виправленнями простих помилок
+- `npm start` &mdash; starts the server in production mode
+- `npm run start:dev` &mdash; starts the server in development mode (development)
+- `npm run lint` &mdash; run the code check with eslint
+- `npm lint:fix` &mdash; the same linter check, but with automatic
+  corrections of simple errors
 
 ## API description
 
-http://localhost:<PORT>
+URL - http://localhost:<PORT>/api
 
 ### --Auth--
 
