@@ -1,22 +1,33 @@
 ## Events App Test Task
 
+###How to start
+
+---
+
+- Use "npm install" or "npm i" and wait for the downloading.
+- Create file ".env" and add the variables contained in the .env.example.
+- Use "npm start" or "npm run start:dev" to start the server and check the result message in console.
+- Use "API Description" to create a requests. 
+
+
+---
+
 ### Commands:
 
-- `npm start` &mdash; старт сервера в режимі production
-- `npm run start:dev` &mdash; старт сервера в режимі розробки (development)
-- `npm run lint` &mdash; запустити виконання перевірки коду з eslint, необхідно
-  виконувати перед кожним PR та виправляти всі помилки лінтера
-- `npm lint:fix` &mdash; та ж перевірка лінтера, але з автоматичними
-  виправленнями простих помилок
+- `npm start` &mdash; starts the server in production mode
+- `npm run start:dev` &mdash; starts the server in development mode (development)
+- `npm run lint` &mdash; run the code check with eslint
+- `npm lint:fix` &mdash; the same linter check, but with automatic
+  corrections of simple errors
 
 ## API description
 
-http://localhost:<PORT>
+URL - http://localhost:<PORT>/api
 
 ### --Auth--
 
 - Main route = "/api/auth"
-  - "/current" - (GET)
+  - "/current" - (GET) @return {status,code, message}
   - "/login" - (POST) @return {status, code, data: {token}}
   - "/registration" - (POST) @return {status, code, data: {token}}
   - "/logout" - (POST) @return {status, code, message}
