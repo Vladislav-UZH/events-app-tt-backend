@@ -50,7 +50,6 @@ const login = async (req, res) => {
     throw HttpError(401, 'Email or password invalid');
   }
   // token creation
-  token = ourUser.token;
   const payload = { id: ourUser._id };
   const time = '23h';
 
