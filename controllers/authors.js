@@ -1,4 +1,5 @@
 const { Author } = require('../db/models/authorModel');
+const { Event } = require('../db/models/eventModel');
 const { HttpError, pagination } = require('../helpers');
 // controllers of getting  authors
 const getAllAuthors = async (req, res) => {
@@ -59,12 +60,12 @@ const createAuthor = async (req, res) => {
 //
 const deleteAuthor = async (req, res) => {
   const { id } = req.params;
-
+  const owner = id;
   const deletedAuthor = await Author.findByIdAndRemove(id);
   if (!deletedAuthor) {
     throw HttpError(404);
   }
-
+  await Event.deleteMany({ owner });
   res.status(200).json({
     status: 'success',
     code: 200,
