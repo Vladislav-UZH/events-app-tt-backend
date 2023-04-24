@@ -67,6 +67,11 @@ const deleteEvent = async (req, res) => {
   if (!event) {
     throw HttpError(404);
   }
+  // decrement totalEvents in owner
+  const ourAuthor = await Author.findById(event.owner);
+  ourAuthor.totalEvents -= 1;
+  await ourAuthor.save();
+  //
   res.status(200).json({
     status: 'success',
     code: 200,

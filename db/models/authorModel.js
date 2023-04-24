@@ -30,7 +30,7 @@ const authorSchema = new Schema(
     },
     nextEventStartDate: {
       type: String,
-      default: null,
+      default: 'none',
     },
     owner: {
       type: Schema.Types.ObjectId,
@@ -38,7 +38,7 @@ const authorSchema = new Schema(
       required: true,
     },
   },
-  { versionKey: false, timestamps: true }
+  { versionKey: false, timestamps: false }
 );
 authorSchema.post('save', handleMongooseError);
 const Author = model('author', authorSchema);

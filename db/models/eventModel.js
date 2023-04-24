@@ -1,10 +1,13 @@
 const Joi = require('joi').extend(require('@joi/date'));
+
+// const moment = require('moment');
 const { Schema, model } = require('mongoose');
 const { handleMongooseError } = require('../../helpers');
 
-// DD-MM-YYYY
+// YYYY-MM-DD
 // eslint-disable-next-line no-useless-escape
-const dateRegExp = /^(0[1-9]|1\d|2\d|3[01])\-(0[1-9]|1[0-2])\-(19|20)\d{2}$/;
+const dateRegExp =
+  /^(19|20)\d\d[- /.](0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])$/;
 const eventSchema = new Schema(
   {
     title: {
@@ -18,6 +21,7 @@ const eventSchema = new Schema(
     startDate: {
       type: String,
       match: dateRegExp,
+      unique: true,
       required: true,
     },
     endDate: {
@@ -32,7 +36,7 @@ const eventSchema = new Schema(
       required: true,
     },
   },
-  { versionKey: false, timestamps: true }
+  { versionKey: false, timestamps: false }
 );
 
 eventSchema.post('save', handleMongooseError);
@@ -40,23 +44,19 @@ const Event = model('event', eventSchema);
 
 // validation schemas
 const errorMessages = {
-  pastDate: 'Event dates cannot be in the past',
+  pastStartDate: 'The start date cannot be in the past',
+  pastEndDate: 'The end date cannot be in the past',
   futureEndDate: ' Field "endDate" must be in the future',
 };
+//
 const createEventSchema = Joi.object({
   title: Joi.string().max(40).required(),
   description: Joi.string().required(),
-  startDate: Joi.date()
-    .format('DD-MM-YYYY')
-    .greater('now')
-    .message(errorMessages.pastDate)
-    .required(),
+  startDate: Joi.date().format('YYYY-MM-DD').required(),
   endDate: Joi.date()
-    .format('DD-MM-YYYY')
-    .greater(Joi.ref('startDate'))
-    .message(errorMessages.futureEndDate)
-    .greater('now')
-    .message(errorMessages.pastDate)
+    .format('YYYY-MM-DD')
+    .min(Joi.ref('startDate'))
+    .message(errorMessages.pastEndDate)
     .required(),
 });
 const schemas = { createEventSchema };
