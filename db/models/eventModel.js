@@ -21,7 +21,6 @@ const eventSchema = new Schema(
     startDate: {
       type: String,
       match: dateRegExp,
-      unique: true,
       required: true,
     },
     endDate: {
@@ -36,7 +35,7 @@ const eventSchema = new Schema(
       required: true,
     },
   },
-  { versionKey: false, timestamps: false }
+  { versionKey: false, timestamps: true }
 );
 
 eventSchema.post('save', handleMongooseError);

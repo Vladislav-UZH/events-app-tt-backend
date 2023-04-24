@@ -67,8 +67,24 @@ const deleteEvent = async (req, res) => {
   if (!event) {
     throw HttpError(404);
   }
-  // decrement totalEvents in owner
+  // decrement totalEvents and update nextEventStartDate in owner
   const ourAuthor = await Author.findById(event.owner);
+  const newestEvent = await Event.findOne().sort({ createdAt: -1 });
+  console.log(newestEvent);
+  if (!newestEvent) {
+    console.log('hello');
+    ourAuthor.nextEventStartDate = 'none';
+    ourAuthor.totalEvents -= 1;
+
+    await ourAuthor.save();
+    res.status(200).json({
+      status: 'success',
+      code: 200,
+      message: 'deleted successfully',
+    });
+    return;
+  }
+  ourAuthor.nextEventStartDate = newestEvent.startDate;
   ourAuthor.totalEvents -= 1;
   await ourAuthor.save();
   //
