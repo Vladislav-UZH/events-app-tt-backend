@@ -22,7 +22,7 @@
 
 ## API description
 
-URL - http://localhost:<PORT>/api
+URL - http://localhost:"PORT"/api
 
 ### --Auth--
 
@@ -37,7 +37,7 @@ URL - http://localhost:<PORT>/api
 ---
 
 AUTHOR SCHEMA = { \_id:"", fistName: "", lastName:"", email:"", phoneNumber: "",
-totalEvents: 0, nextEventStartDate: null/"", owner: "" },
+totalEvents: 0, nextEventStartDate: "", owner: "" },
 
 ---
 
