@@ -22,7 +22,7 @@
 
 ## API description
 
-URL - http://localhost:"PORT"/api
+URL - http://localhost:PORT/api
 
 ### --Auth--
 
